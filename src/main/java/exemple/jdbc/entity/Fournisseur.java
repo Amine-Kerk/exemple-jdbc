@@ -1,5 +1,4 @@
 package exemple.jdbc.entity;
-
 public class Fournisseur {
 	private Integer id ;
 	private String nom ;

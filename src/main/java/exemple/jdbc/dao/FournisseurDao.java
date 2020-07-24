@@ -1,5 +1,4 @@
 package exemple.jdbc.dao;
-
 import java.util.List;
 
 import exemple.jdbc.entity.Fournisseur;
