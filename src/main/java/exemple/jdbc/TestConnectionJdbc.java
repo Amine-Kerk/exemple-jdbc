@@ -17,7 +17,7 @@ public class TestConnectionJdbc {
 
 	public static void main(String[] args) {
 
-		// recupere le fichier properties
+		// recupere le fichier properties7
 		ResourceBundle db = ResourceBundle.getBundle("database2");
 		Connection connection = null;
 
