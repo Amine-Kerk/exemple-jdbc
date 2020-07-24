@@ -26,5 +26,12 @@ public class Fournisseur {
 		this.nom = nom;
 	}
 
+	@Override
+	public String toString() {
+		return "Fournisseur [id=" + id + ", nom=" + nom + "]";
+	}
+	
+	
+
 	
 }
