@@ -8,7 +8,7 @@ import exemple.jdbc.entity.Fournisseur;
  *create :insert
  *read :extraire 
  *update 
- *
+ *delete
  */
 public interface FournisseurDao {
 

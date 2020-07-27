@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import exemple.jdbc.entity.Article;
 
 
+
 public class ArticleDaoJdbc implements ArticleDao {
 
 	public static void main(String[] a) {
@@ -21,6 +22,23 @@ public class ArticleDaoJdbc implements ArticleDao {
 		for (Article art : listeArt) {
 			System.out.println(art);
 		}
+		
+		ofo.update("Marteau piqueur","Marteau");
+		listeArt = ofo.extraire();
+		for (Article ar : listeArt) {
+			System.out.println(ar);
+	}
+		if (ofo.delete(new Article(11,"XX0","Marteau",100.0,1)) ) System.out.println("Article supprimé !");
+		listeArt = ofo.extraire();
+		for (Article ar : listeArt) {
+			System.out.println(ar);
+		}
+		
+//		ofo.insert(new Article(11,"XX0","Marteau piqueur",100.0,1));
+//		listeArt = ofo.extraire();
+//	    for (Article fo : listeArt) {
+//     	System.out.println(fo);
+//	}
 
 	}
 	
@@ -69,11 +87,107 @@ public class ArticleDaoJdbc implements ArticleDao {
 
 		return listeArt;
 	}
-
+	@Override
 	public void insert(Article article) {
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			Statement monCanal = connection.createStatement();
+			int nb = monCanal.executeUpdate("insert into article (id,ref,designation,prix,id_fou) values " + "(" 
+			+ article.getId() + ",'"
+			+ article.getRef()+ "','"
+			+ article.getDesignation() +"',"
+			+ article.getPrix() +","
+			+ article.getId_fou()+")");
 
+			if (nb == 1) {
+				System.out.println("article ajouté !");
+			}
+
+			monCanal.close();
+
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+
+		}
+
+		finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e)
+
+			{
+				System.err.println("probleme de connection close : " + e.getMessage());
+			}
+		}
 	}
 
+	@Override
+	
+	public int update(String ancienDesignation,String nouveauDesignation) {
+		Connection connection = null;
+		int nb = 0;
+		try {
+			connection = getConnection();
+			Statement monCanal = connection.createStatement();
+			nb = monCanal
+					.executeUpdate("update article SET designation= '" + nouveauDesignation + "'where designation='" + ancienDesignation+ "';");
+
+			monCanal.close();
+
+		} catch (Exception e) {
+			System.err.println("erreur d'execution : " + e.getMessage());
+
+		}
+
+		finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e)
+
+			{
+				System.err.println("probleme de connection close : " + e.getMessage());
+			}
+		}
+
+		return nb;
+	}
+
+	@Override
+	public boolean delete(Article article ) {
+		Connection connection = null;
+		boolean nb = false;
+		try {
+			connection = getConnection();
+			Statement monCanal = connection.createStatement();
+			
+			if (monCanal.executeUpdate("delete from article where id ="+article.getId()+";")==1)
+            nb = true ;
+			monCanal.close();
+		
+		} 
+	catch (Exception e) {
+			System.err.println("erreur d'execution : " + e.getMessage());
+
+		}
+
+		finally {
+			try {
+				if (connection != null) connection.close();
+			}
+			 catch (SQLException e)
+
+			{
+				System.err.println("probleme de connection close : " + e.getMessage());
+			}
+		
+		}
+
+		return nb;
+	}
+	
 	public Connection getConnection() {
 		ResourceBundle db = ResourceBundle.getBundle("database");
 
@@ -88,17 +202,5 @@ public class ArticleDaoJdbc implements ArticleDao {
            throw new RuntimeException();
 		}
 	
-	}
-
-	@Override
-	public int update(String ancienNom, String nouveauNom) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean delete(Article article) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }
